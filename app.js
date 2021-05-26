@@ -5,7 +5,9 @@ const session = require('express-session')
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
 require('./app/models/Users')
+require('./passport-config')
 const index   = require('./app/routes/index')
+const passport = require('passport')
 
 //Configure Mongoose
 mongoose.connect('mongodb://localhost/passport-tutorial',
@@ -31,12 +33,14 @@ function errorHandler (err, req, res, next) {
 //app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors())
 app.use(bodyParser.text() )
-app.use( bodyParser.json() )
+app.use(bodyParser.json() )
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', index)
 
-app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 }, resave: false,
-  saveUninitialized: false }));
+app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 },
+  resave: false, saveUninitialized: false }))
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(methodOverride())
 app.use(logErrors)
