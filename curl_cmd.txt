@@ -1,0 +1,11 @@
+curl -H 'Accept: application/json' -H "Authorization: Token <string>" -X GET  http://localhost:8080/api/users/current
+
+curl -H 'Content-Type: application/json' -d '{"user": {"email":"abc", "password":"test"}}' -X POST  http://localhost:8080/api/users/login
+
+# create new user
+curl -d '{"user": {"email":"abc","password":"test"}}' -H "Content-Type: application/json" -X POST http://localhost:8080/api/users
+
+# create new user, print the response header
+curl -d '{"user": {"email":"abc","password":"test"}}' -H "Content-Type: application/json" -X POST http://18.224.5.109:8080/api/users -i
+
+curl -H 'Content-Type: application/json' -X GET  http://localhost:8080/qr/qrtest
