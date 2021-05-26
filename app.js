@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const redis = require('redis')
 const session = require('express-session')
 const mongoose = require('mongoose')
 const methodOverride = require('method-override')
@@ -8,6 +9,9 @@ require('./app/models/Users')
 require('./passport-config')
 const index   = require('./app/routes/index')
 const passport = require('passport')
+
+let RedisStore = require('connect-redis')(session)
+let redisClient = redis.createClient()
 
 //Configure Mongoose
 mongoose.connect('mongodb://localhost/passport-tutorial',
@@ -37,8 +41,13 @@ app.use(bodyParser.json() )
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', index)
 
-app.use(session({ secret: 'passport-tutorial', cookie: { maxAge: 60000 },
-  resave: false, saveUninitialized: false }))
+app.use(session({
+  secret: 'hiddensecret',
+  cookie: { maxAge: 60000 },
+  resave: false,
+  saveUninitialized: false ,
+  store: new RedisStore({client: redisClient, ttl: 86400})
+}))
 app.use(passport.initialize())
 app.use(passport.session())
 
