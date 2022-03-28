@@ -74,8 +74,8 @@ router.post('/login', auth.optional, (req, res, next) => {
 //GET current route (required, only authenticated users have access)
 router.get('/current', auth.required, (req, res, next) => {
   const { payload: { id } } = req;
-  console.log(req)
-  console.log(id)
+  //console.log(req)
+  console.log('id ', id)
 
   return Users.findById(id)
     .then((user) => {
